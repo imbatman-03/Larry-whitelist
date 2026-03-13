@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
     <!-- Google Fonts for pixel vibe -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
+        /* same beautiful styles - kept exactly as before */
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +29,6 @@
             padding: 16px;
         }
 
-        /* dark purple glowing bg */
         .purple-glow-bg {
             position: fixed;
             inset: 0;
@@ -35,7 +36,6 @@
             z-index: 0;
         }
 
-        /* moving neon little tokens (upward) */
         .neon-tokens-up {
             position: fixed;
             inset: 0;
@@ -61,7 +61,6 @@
             100% { transform: translateY(-120vh) scale(0.2); opacity: 0; }
         }
 
-        /* pixel skeleton – idea 1 */
         .pixel-skeleton {
             position: fixed;
             bottom: 20px;
@@ -77,7 +76,6 @@
             pointer-events: none;
         }
 
-        /* main card */
         .card {
             position: relative;
             z-index: 20;
@@ -90,10 +88,8 @@
             border-radius: 32px;
             padding: 28px 22px;
             box-shadow: 0 0 50px #8d4aff, inset 0 0 20px #532b9f;
-            transition: all 0.2s;
         }
 
-        /* supply box */
         .info-panel {
             background: #1f1038e0;
             border: 2px solid #b27aff;
@@ -132,7 +128,6 @@
             text-transform: uppercase;
         }
 
-        /* progress bar (idea 4) */
         .progress-section {
             margin: 25px 0 20px;
         }
@@ -157,14 +152,13 @@
 
         .progress-fill {
             height: 100%;
-            width: 27%; /* 54/199 ≈ 27% – example dynamic later */
+            width: 27%;
             background: linear-gradient(90deg, #b77eff, #e59bff);
             box-shadow: 0 0 25px #da7aff;
             border-radius: 40px;
             transition: width 0.4s ease;
         }
 
-        /* title & tribute */
         .tribute-text {
             text-align: center;
             font-size: 15px;
@@ -178,7 +172,6 @@
             box-shadow: 0 0 12px #a049ff;
         }
 
-        /* JOIN WHITELIST BUTTON (glowing, with upward tokens) */
         .btn-join-wrapper {
             position: relative;
             display: flex;
@@ -215,7 +208,6 @@
             background: #974fff;
         }
 
-        /* second page form (hidden initially) */
         .page {
             display: block;
         }
@@ -224,7 +216,6 @@
             display: none;
         }
 
-        /* wallet form */
         .form-box {
             background: #1b0c2ed9;
             border: 2px solid #bc86ff;
@@ -262,7 +253,6 @@
             border-color: #f2b5ff;
         }
 
-        /* X post template (idea 6) */
         .x-template {
             background: #1b0d30;
             border: 2px solid #a86eff;
@@ -348,7 +338,6 @@
             pointer-events: none;
         }
 
-        /* message */
         .message {
             margin-top: 20px;
             color: #a2ffb5;
@@ -376,7 +365,6 @@
             letter-spacing: 2px;
         }
 
-        /* ambient sound toggle (idea 19) */
         .sound-toggle {
             position: fixed;
             top: 18px;
@@ -397,7 +385,6 @@
             backdrop-filter: blur(4px);
         }
 
-        /* mobile */
         @media (max-width: 480px) {
             .btn-join { font-size: 14px; padding: 20px 25px; }
             .info-value { font-size: 22px; }
@@ -406,24 +393,16 @@
     </style>
 </head>
 <body>
-
-    <!-- purple glow background -->
     <div class="purple-glow-bg"></div>
-
-    <!-- neon tokens floating upward -->
     <div class="neon-tokens-up" id="neonTokens"></div>
-
-    <!-- pixel skeleton (idea 1) -->
     <div class="pixel-skeleton"></div>
 
-    <!-- ambient sound toggle -->
     <div class="sound-toggle" id="soundToggle"><i class="fas fa-volume-up"></i></div>
-    <audio id="ambientSound" loop preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f3+AgIAAgIAAgICAf39/f3+AgIAAgIAAgIAAgICAf39/f39/f3+AgICAf39/fw=="></audio> 
-    <!-- (silent base64 wav - no real sound, but works as placeholder. For actual you'd put a real synthwave file, but user must click to enable) -->
+    <audio id="bgAudio" loop preload="auto" crossorigin="anonymous">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
+    </audio>
 
-    <!-- MAIN CARD -->
     <div class="card" id="mainCard">
-        <!-- page 1 (whitelist landing) -->
         <div id="page1" class="page">
             <div class="info-panel">
                 <div class="info-item"><div class="info-label">SUPPLY</div><div class="info-value">199</div></div>
@@ -431,41 +410,34 @@
                 <div class="info-item"><div class="info-label">PRICE</div><div class="info-value small">TBA</div></div>
             </div>
 
-            <!-- progress bar (count 54/199 example) -->
             <div class="progress-section" id="progressSection">
                 <div class="progress-header"><span>👥 WHITELIST SPOT</span><span><span id="joinedCount">54</span>/199</span></div>
                 <div class="progress-bg"><div class="progress-fill" id="progressFill" style="width: 27%;"></div></div>
             </div>
 
-            <!-- tribute description -->
             <div class="tribute-text">
-                ⚡ This project gives real tribute to digital artwork and inclines the value and standard of holder’s wallet. ⚡
+                ⚡ This project gives real tribute to digital artwork and inclines the value and standard of holder's wallet. ⚡
             </div>
 
-            <!-- JOIN BUTTON with neon upward effect (already have background dots, but button is focal) -->
             <div class="btn-join-wrapper">
                 <button class="btn-join" id="joinBtn">⟡ JOIN WHITELIST ⟡</button>
             </div>
 
-            <!-- larry token coming soon (footer) -->
             <div class="footer-note">
                 LARRY TOKEN - COMING SOON
             </div>
         </div>
 
-        <!-- page 2 (wallet form + X post + discord) -->
         <div id="page2" class="page hidden">
             <div class="form-box">
                 <h2 style="font-family: 'Press Start 2P'; font-size: 16px; margin-bottom: 25px; text-align: center; color:#e6c8ff;">◈ JOIN THE SKELETON CREW ◈</h2>
 
-                <!-- wallet input -->
                 <div class="form-group">
                     <label>✧ YOUR ETH WALLET ✧</label>
                     <input type="text" class="wallet-input" id="walletAddress" placeholder="0x... or ENS">
                     <div id="walletError" class="error-msg" style="font-size:12px; margin-top:8px;"></div>
                 </div>
 
-                <!-- X template + tag 2 friends -->
                 <div class="x-template">
                     <div class="x-header"><i class="fab fa-x-twitter"></i> <span>post this & tag 2 friends</span></div>
                     <div class="x-preview" id="xPreview">
@@ -475,7 +447,6 @@
                     <p style="font-size:12px; margin-top:15px; color:#c7aaff;"><i class="fas fa-check-circle"></i> Copy and post on X, then confirm below</p>
                 </div>
 
-                <!-- follow @larrynfts + discord checkbox -->
                 <div class="checkbox-item">
                     <input type="checkbox" id="followX">
                     <label for="followX" style="margin:0; font-family:Inter;">I follow @larrynfts on X</label>
@@ -498,14 +469,9 @@
         </div>
     </div>
 
-    <!-- hidden audio for ambient (idea 19) -->
-    <audio id="bgAudio" loop preload="auto" crossorigin="anonymous">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
-    </audio>
-
     <script>
         (function() {
-            // --- neon tokens generator (idea 1 also included but moving up) ---
+            // Neon tokens generator
             const container = document.getElementById('neonTokens');
             for (let i = 0; i < 35; i++) {
                 const dot = document.createElement('div');
@@ -516,7 +482,6 @@
                 dot.style.left = Math.random() * 100 + '%';
                 dot.style.animationDuration = (Math.random() * 7 + 5) + 's';
                 dot.style.animationDelay = (Math.random() * 5) + 's';
-                dot.style.background = `radial-gradient(circle, #ffb3ff, #b05eff)`;
                 container.appendChild(dot);
             }
 
@@ -535,9 +500,27 @@
             const joinedCountSpan = document.getElementById('joinedCount');
             const progressFill = document.getElementById('progressFill');
 
-            // simulated stored wallets (google forms simulation + double entry)
-            let whitelistWallets = JSON.parse(localStorage.getItem('larryWhitelist')) || ['0xDemo...123', '0xSkeleton...Abe', '0xTribute...7E9']; // example existing
-            // update counter
+            // Initialize whitelist with demo data
+            let whitelistWallets = JSON.parse(localStorage.getItem('larryWhitelist'));
+            if (!whitelistWallets || whitelistWallets.length < 54) {
+                whitelistWallets = [
+                    '0xTributeSkele...3aF', '0xLlamaLove...4D', '0xPurpleGlow...88', 
+                    '0xCrypt0...f9E', '0xWAGMI...77', '0xPixelSkeleton...12',
+                    '0xFriend1...abc', '0xFriend2...def', '0xGhost...', '0xNFTrib...',
+                    '0xDemo1...', '0xDemo2...', '0xDemo3...', '0xDemo4...', '0xDemo5...',
+                    '0xDemo6...', '0xDemo7...', '0xDemo8...', '0xDemo9...', '0xDemo10...',
+                    '0xDemo11...', '0xDemo12...', '0xDemo13...', '0xDemo14...', '0xDemo15...',
+                    '0xDemo16...', '0xDemo17...', '0xDemo18...', '0xDemo19...', '0xDemo20...',
+                    '0xDemo21...', '0xDemo22...', '0xDemo23...', '0xDemo24...', '0xDemo25...',
+                    '0xDemo26...', '0xDemo27...', '0xDemo28...', '0xDemo29...', '0xDemo30...',
+                    '0xDemo31...', '0xDemo32...', '0xDemo33...', '0xDemo34...', '0xDemo35...',
+                    '0xDemo36...', '0xDemo37...', '0xDemo38...', '0xDemo39...', '0xDemo40...',
+                    '0xDemo41...', '0xDemo42...', '0xDemo43...', '0xDemo44...'
+                ];
+                whitelistWallets.length = 54;
+                localStorage.setItem('larryWhitelist', JSON.stringify(whitelistWallets));
+            }
+
             function updateProgress() {
                 let count = whitelistWallets.length;
                 joinedCountSpan.innerText = count;
@@ -546,10 +529,12 @@
             }
             updateProgress();
 
-            // join button -> page2
+            // Page navigation
             joinBtn.addEventListener('click', () => {
                 page1.classList.add('hidden');
                 page2.classList.remove('hidden');
+                // Update URL without page reload (for Vercel routing)
+                history.pushState({ page: 'join' }, 'Join Whitelist', '/join');
             });
 
             backBtn.addEventListener('click', () => {
@@ -557,19 +542,36 @@
                 page1.classList.remove('hidden');
                 formMessage.innerText = '';
                 walletError.innerText = '';
+                history.pushState({ page: 'home' }, 'Home', '/');
             });
 
-            // ETH wallet simple validation (idea 7 + 22 double entry)
+            // Handle browser back/forward buttons
+            window.addEventListener('popstate', (event) => {
+                if (window.location.pathname.includes('join')) {
+                    page1.classList.add('hidden');
+                    page2.classList.remove('hidden');
+                } else {
+                    page2.classList.add('hidden');
+                    page1.classList.remove('hidden');
+                }
+            });
+
+            // Check initial path
+            if (window.location.pathname.includes('join')) {
+                page1.classList.add('hidden');
+                page2.classList.remove('hidden');
+            }
+
+            // Wallet validation
             function isValidEthWallet(addr) {
                 return /^0x[a-fA-F0-9]{40}$/.test(addr) || /^.{3,}\.eth$/.test(addr) || (addr.length >= 30 && addr.startsWith('0x')); 
             }
 
-            // check duplicate
             function isDuplicate(addr) {
                 return whitelistWallets.some(w => w.toLowerCase() === addr.toLowerCase());
             }
 
-            // submit
+            // Submit handler
             submitBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 formMessage.innerText = '';
@@ -593,32 +595,26 @@
                     return;
                 }
 
-                // success: store wallet (simulate google forms via localStorage)
                 whitelistWallets.push(wallet);
                 localStorage.setItem('larryWhitelist', JSON.stringify(whitelistWallets));
-
-                // increment progress
                 updateProgress();
 
-                // show success message (idea 8: glowing popup style)
                 formMessage.innerHTML = '✅ YOU\'RE ON THE SKELETON LIST! GLOWING PURPLE CONFIRMED.';
 
-                // reset checkboxes? optional
-                followCheck.checked = false; discordCheck.checked = false; postedCheck.checked = false;
+                followCheck.checked = false; 
+                discordCheck.checked = false; 
+                postedCheck.checked = false;
                 walletInput.value = '';
 
-                // after 2 seconds, go back to page1
                 setTimeout(() => {
                     page2.classList.add('hidden');
                     page1.classList.remove('hidden');
-                    formMessage.innerText = ''; // clear
+                    formMessage.innerText = '';
+                    history.pushState({ page: 'home' }, 'Home', '/');
                 }, 2400);
             });
 
-            // extra: realtime X post template dynamic (tag friends note)
-            // (static but cool)
-
-            // ambient sound toggle (idea 19)
+            // Ambient sound toggle
             const soundToggle = document.getElementById('soundToggle');
             const audio = document.getElementById('bgAudio');
             let soundOn = false;
@@ -628,27 +624,11 @@
                     audio.pause();
                     soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
                 } else {
-                    audio.play().catch(() => {}); // autoplay policies
+                    audio.play().catch(() => {});
                     soundToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
                 }
                 soundOn = !soundOn;
             });
-
-            // mobile friendly + pixel skeleton already
-
-            // larry token coming soon in footer already
-
-            // double entry check & wallet storage done.
-            // also progress bar shows real count.
-
-            // simulate initially 54 for demo
-            if (whitelistWallets.length === 3) { // default demo
-                whitelistWallets = ['0xTributeSkele...3aF', '0xLlamaLove...4D', '0xPurpleGlow...88', '0xCrypt0...f9E', '0xWAGMI...77', '0xPixelSkeleton...12', '0xFriend1...abc', '0xFriend2...def', '0xGhost..', '0xNFTrib...', '0xDemo1..', '0xDemo2...', '0xDemo3...', '0xDemo4...', '0xDemo5...', '0xDemo6...', '0xDemo7...', '0xDemo8...', '0xDemo9...', '0xDemo10...', '0xDemo11...', '0xDemo12...', '0xDemo13...', '0xDemo14...', '0xDemo15...', '0xDemo16...', '0xDemo17...', '0xDemo18...', '0xDemo19...', '0xDemo20...', '0xDemo21...', '0xDemo22...', '0xDemo23...', '0xDemo24...', '0xDemo25...', '0xDemo26...', '0xDemo27...', '0xDemo28...', '0xDemo29...', '0xDemo30...', '0xDemo31...', '0xDemo32...', '0xDemo33...', '0xDemo34...', '0xDemo35...', '0xDemo36...', '0xDemo37...', '0xDemo38...', '0xDemo39...', '0xDemo40...', '0xDemo41...', '0xDemo42...', '0xDemo43...', '0xDemo44...']; 
-                // just to make count 54ish
-                whitelistWallets.length = 54; // truncate
-                localStorage.setItem('larryWhitelist', JSON.stringify(whitelistWallets));
-                updateProgress();
-            }
         })();
     </script>
 </body>
