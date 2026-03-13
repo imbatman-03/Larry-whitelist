@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>LARRY · SKELETON WHITELIST</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts for pixel vibe -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0c031a;
+            color: #f0e6ff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        /* dark purple glowing bg */
+        .purple-glow-bg {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 40% 50%, #2e1b4e 0%, #0a0315 80%);
+            z-index: 0;
+        }
+
+        /* moving neon little tokens (upward) */
+        .neon-tokens-up {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .neon-dot {
+            position: absolute;
+            bottom: -20px;
+            width: 6px;
+            height: 6px;
+            background: #ca7eff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #b755ff, 0 0 40px #a030ff;
+            opacity: 0.8;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-120vh) scale(0.2); opacity: 0; }
+        }
+
+        /* pixel skeleton – idea 1 */
+        .pixel-skeleton {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 64px;
+            height: 64px;
+            image-rendering: pixelated;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%2322123a"/><rect x="3" y="3" width="2" height="2" fill="%23b294ff"/><rect x="11" y="3" width="2" height="2" fill="%23b294ff"/><rect x="5" y="7" width="6" height="2" fill="%23b294ff"/><rect x="4" y="9" width="2" height="3" fill="%23b294ff"/><rect x="10" y="9" width="2" height="3" fill="%23b294ff"/><rect x="6" y="11" width="4" height="2" fill="%23b294ff"/></svg>');
+            background-size: cover;
+            filter: drop-shadow(0 0 12px #b77eff);
+            opacity: 0.9;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        /* main card */
+        .card {
+            position: relative;
+            z-index: 20;
+            max-width: 680px;
+            width: 100%;
+            background: rgba(12, 5, 28, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 2px solid #a574ff;
+            border-radius: 32px;
+            padding: 28px 22px;
+            box-shadow: 0 0 50px #8d4aff, inset 0 0 20px #532b9f;
+            transition: all 0.2s;
+        }
+
+        /* supply box */
+        .info-panel {
+            background: #1f1038e0;
+            border: 2px solid #b27aff;
+            border-radius: 28px;
+            padding: 20px 16px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 0 25px #a14bff;
+        }
+
+        .info-item {
+            flex: 1 1 100px;
+        }
+
+        .info-label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #c9adff;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .info-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #f2e2ff;
+            text-shadow: 0 0 15px #c577ff;
+        }
+
+        .info-value.small {
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+
+        /* progress bar (idea 4) */
+        .progress-section {
+            margin: 25px 0 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 600;
+            color: #c7b0ff;
+            margin-bottom: 8px;
+        }
+
+        .progress-bg {
+            height: 20px;
+            background: #1e102f;
+            border-radius: 40px;
+            border: 1px solid #9a6eff;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px #00000055;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 27%; /* 54/199 ≈ 27% – example dynamic later */
+            background: linear-gradient(90deg, #b77eff, #e59bff);
+            box-shadow: 0 0 25px #da7aff;
+            border-radius: 40px;
+            transition: width 0.4s ease;
+        }
+
+        /* title & tribute */
+        .tribute-text {
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #dccaff;
+            background: #1c0c30b3;
+            padding: 18px 16px;
+            border-radius: 28px;
+            border: 1px solid #a26eff;
+            margin: 20px 0 25px;
+            box-shadow: 0 0 12px #a049ff;
+        }
+
+        /* JOIN WHITELIST BUTTON (glowing, with upward tokens) */
+        .btn-join-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin: 25px 0 15px;
+        }
+
+        .btn-join {
+            background: #7d3eff;
+            border: none;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 20px;
+            padding: 24px 45px;
+            border-radius: 80px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 0 50px #bc7aff, 0 0 120px #9147ff;
+            border: 3px solid #e5b2ff;
+            cursor: pointer;
+            transition: 0.2s;
+            animation: glowPulse 2s infinite;
+            z-index: 10;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 40px #c67cff; }
+            50% { box-shadow: 0 0 90px #f4adff; }
+            100% { box-shadow: 0 0 40px #c67cff; }
+        }
+
+        .btn-join:hover {
+            transform: scale(1.02);
+            background: #974fff;
+        }
+
+        /* second page form (hidden initially) */
+        .page {
+            display: block;
+        }
+
+        .page.hidden {
+            display: none;
+        }
+
+        /* wallet form */
+        .form-box {
+            background: #1b0c2ed9;
+            border: 2px solid #bc86ff;
+            border-radius: 48px;
+            padding: 28px 20px;
+            margin-top: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .form-group {
+            margin-bottom: 26px;
+        }
+
+        label {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 11px;
+            display: block;
+            margin-bottom: 12px;
+            color: #e2cbff;
+        }
+
+        .wallet-input {
+            width: 100%;
+            background: #0f0520;
+            border: 2px solid #a26eff;
+            border-radius: 50px;
+            padding: 18px 22px;
+            font-size: 16px;
+            color: #ffffff;
+            outline: none;
+            box-shadow: 0 0 15px #ad5eff;
+        }
+
+        .wallet-input:focus {
+            border-color: #f2b5ff;
+        }
+
+        /* X post template (idea 6) */
+        .x-template {
+            background: #1b0d30;
+            border: 2px solid #a86eff;
+            border-radius: 28px;
+            padding: 24px 16px;
+            margin: 25px 0;
+            box-shadow: 0 0 20px #bc73ff;
+        }
+
+        .x-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #f0ddff;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .x-header i {
+            font-size: 28px;
+            color: #ffffff;
+        }
+
+        .x-preview {
+            background: #120825;
+            padding: 22px;
+            border-radius: 28px;
+            border: 1px solid #b576ff;
+            font-size: 15px;
+        }
+
+        .x-preview p {
+            margin-bottom: 16px;
+        }
+
+        .x-preview .hash {
+            color: #b388ff;
+        }
+
+        .x-fake-buttons {
+            display: flex;
+            gap: 30px;
+            margin-top: 15px;
+            color: #8965c4;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 22px 0;
+            background: #22123b;
+            padding: 14px 20px;
+            border-radius: 60px;
+            border: 1px solid #a069ff;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            accent-color: #ac6cff;
+            box-shadow: 0 0 15px #c971ff;
+        }
+
+        .btn-submit {
+            background: #9147ff;
+            border: none;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            padding: 20px 30px;
+            border-radius: 60px;
+            width: 100%;
+            font-size: 16px;
+            border: 2px solid #d193ff;
+            box-shadow: 0 0 30px #ba73ff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            filter: grayscale(0.6);
+            pointer-events: none;
+        }
+
+        /* message */
+        .message {
+            margin-top: 20px;
+            color: #a2ffb5;
+            font-size: 15px;
+            text-align: center;
+            background: #1d1235;
+            padding: 10px;
+            border-radius: 30px;
+        }
+
+        .error-msg {
+            color: #ffa6bc;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 28px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #bb9eff;
+            background: #110825;
+            padding: 16px;
+            border-radius: 40px;
+            border: 2px solid #b56eff;
+            letter-spacing: 2px;
+        }
+
+        /* ambient sound toggle (idea 19) */
+        .sound-toggle {
+            position: fixed;
+            top: 18px;
+            right: 20px;
+            z-index: 100;
+            background: #2d1852;
+            border: 2px solid #c191ff;
+            border-radius: 60px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 30px #b86eff;
+            backdrop-filter: blur(4px);
+        }
+
+        /* mobile */
+        @media (max-width: 480px) {
+            .btn-join { font-size: 14px; padding: 20px 25px; }
+            .info-value { font-size: 22px; }
+            .pixel-skeleton { width: 48px; height: 48px; bottom: 10px; left: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- purple glow background -->
+    <div class="purple-glow-bg"></div>
+
+    <!-- neon tokens floating upward -->
+    <div class="neon-tokens-up" id="neonTokens"></div>
+
+    <!-- pixel skeleton (idea 1) -->
+    <div class="pixel-skeleton"></div>
+
+    <!-- ambient sound toggle -->
+    <div class="sound-toggle" id="soundToggle"><i class="fas fa-volume-up"></i></div>
+    <audio id="ambientSound" loop preload="auto" src="data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVoAAACAgICAf39/f39/f3+AgICAf39/f3+AgIAAgIAAgICAf39/f3+AgIAAgIAAgIAAgICAf39/f39/f3+AgICAf39/fw=="></audio> 
+    <!-- (silent base64 wav - no real sound, but works as placeholder. For actual you'd put a real synthwave file, but user must click to enable) -->
+
+    <!-- MAIN CARD -->
+    <div class="card" id="mainCard">
+        <!-- page 1 (whitelist landing) -->
+        <div id="page1" class="page">
+            <div class="info-panel">
+                <div class="info-item"><div class="info-label">SUPPLY</div><div class="info-value">199</div></div>
+                <div class="info-item"><div class="info-label">DATE</div><div class="info-value small">TBA</div></div>
+                <div class="info-item"><div class="info-label">PRICE</div><div class="info-value small">TBA</div></div>
+            </div>
+
+            <!-- progress bar (count 54/199 example) -->
+            <div class="progress-section" id="progressSection">
+                <div class="progress-header"><span>👥 WHITELIST SPOT</span><span><span id="joinedCount">54</span>/199</span></div>
+                <div class="progress-bg"><div class="progress-fill" id="progressFill" style="width: 27%;"></div></div>
+            </div>
+
+            <!-- tribute description -->
+            <div class="tribute-text">
+                ⚡ This project gives real tribute to digital artwork and inclines the value and standard of holder’s wallet. ⚡
+            </div>
+
+            <!-- JOIN BUTTON with neon upward effect (already have background dots, but button is focal) -->
+            <div class="btn-join-wrapper">
+                <button class="btn-join" id="joinBtn">⟡ JOIN WHITELIST ⟡</button>
+            </div>
+
+            <!-- larry token coming soon (footer) -->
+            <div class="footer-note">
+                LARRY TOKEN - COMING SOON
+            </div>
+        </div>
+
+        <!-- page 2 (wallet form + X post + discord) -->
+        <div id="page2" class="page hidden">
+            <div class="form-box">
+                <h2 style="font-family: 'Press Start 2P'; font-size: 16px; margin-bottom: 25px; text-align: center; color:#e6c8ff;">◈ JOIN THE SKELETON CREW ◈</h2>
+
+                <!-- wallet input -->
+                <div class="form-group">
+                    <label>✧ YOUR ETH WALLET ✧</label>
+                    <input type="text" class="wallet-input" id="walletAddress" placeholder="0x... or ENS">
+                    <div id="walletError" class="error-msg" style="font-size:12px; margin-top:8px;"></div>
+                </div>
+
+                <!-- X template + tag 2 friends -->
+                <div class="x-template">
+                    <div class="x-header"><i class="fab fa-x-twitter"></i> <span>post this & tag 2 friends</span></div>
+                    <div class="x-preview" id="xPreview">
+                        <p>🐦 I'm whitelisted for @larrynfts skeleton collection! 🔥<br>Real tribute to digital art. <span class="hash">#LarryNFTs</span> <span class="hash">#SkeletonCrew</span><br>👉 @friend1 @friend2</p>
+                        <div class="x-fake-buttons"><i class="far fa-heart"></i> <i class="far fa-retweet"></i> <i class="far fa-comment"></i></div>
+                    </div>
+                    <p style="font-size:12px; margin-top:15px; color:#c7aaff;"><i class="fas fa-check-circle"></i> Copy and post on X, then confirm below</p>
+                </div>
+
+                <!-- follow @larrynfts + discord checkbox -->
+                <div class="checkbox-item">
+                    <input type="checkbox" id="followX">
+                    <label for="followX" style="margin:0; font-family:Inter;">I follow @larrynfts on X</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="joinedDiscord">
+                    <label for="joinedDiscord" style="margin:0; font-family:Inter;">I joined Discord <a href="https://discord.gg/JgzkKDQHb" target="_blank" style="color:#d7abff;">discord.gg/JgzkKDQHb</a></label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="postedX">
+                    <label for="postedX" style="margin:0; font-family:Inter;">I posted & tagged 2 friends</label>
+                </div>
+
+                <button class="btn-submit" id="submitBtn">✓ COMPLETE WHITELIST</button>
+                <div id="formMessage" class="message"></div>
+                <div style="text-align:center; margin-top: 20px;">
+                    <i class="fas fa-arrow-left" style="color:#b27aff; cursor:pointer;" id="backToPage1"></i> <span style="color:#ba9eff;"> back</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- hidden audio for ambient (idea 19) -->
+    <audio id="bgAudio" loop preload="auto" crossorigin="anonymous">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        (function() {
+            // --- neon tokens generator (idea 1 also included but moving up) ---
+            const container = document.getElementById('neonTokens');
+            for (let i = 0; i < 35; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('neon-dot');
+                const size = Math.floor(Math.random() * 12 + 4);
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+                dot.style.left = Math.random() * 100 + '%';
+                dot.style.animationDuration = (Math.random() * 7 + 5) + 's';
+                dot.style.animationDelay = (Math.random() * 5) + 's';
+                dot.style.background = `radial-gradient(circle, #ffb3ff, #b05eff)`;
+                container.appendChild(dot);
+            }
+
+            // DOM elements
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+            const joinBtn = document.getElementById('joinBtn');
+            const backBtn = document.getElementById('backToPage1');
+            const walletInput = document.getElementById('walletAddress');
+            const followCheck = document.getElementById('followX');
+            const discordCheck = document.getElementById('joinedDiscord');
+            const postedCheck = document.getElementById('postedX');
+            const submitBtn = document.getElementById('submitBtn');
+            const formMessage = document.getElementById('formMessage');
+            const walletError = document.getElementById('walletError');
+            const joinedCountSpan = document.getElementById('joinedCount');
+            const progressFill = document.getElementById('progressFill');
+
+            // simulated stored wallets (google forms simulation + double entry)
+            let whitelistWallets = JSON.parse(localStorage.getItem('larryWhitelist')) || ['0xDemo...123', '0xSkeleton...Abe', '0xTribute...7E9']; // example existing
+            // update counter
+            function updateProgress() {
+                let count = whitelistWallets.length;
+                joinedCountSpan.innerText = count;
+                let percent = Math.min(100, (count / 199) * 100);
+                progressFill.style.width = percent + '%';
+            }
+            updateProgress();
+
+            // join button -> page2
+            joinBtn.addEventListener('click', () => {
+                page1.classList.add('hidden');
+                page2.classList.remove('hidden');
+            });
+
+            backBtn.addEventListener('click', () => {
+                page2.classList.add('hidden');
+                page1.classList.remove('hidden');
+                formMessage.innerText = '';
+                walletError.innerText = '';
+            });
+
+            // ETH wallet simple validation (idea 7 + 22 double entry)
+            function isValidEthWallet(addr) {
+                return /^0x[a-fA-F0-9]{40}$/.test(addr) || /^.{3,}\.eth$/.test(addr) || (addr.length >= 30 && addr.startsWith('0x')); 
+            }
+
+            // check duplicate
+            function isDuplicate(addr) {
+                return whitelistWallets.some(w => w.toLowerCase() === addr.toLowerCase());
+            }
+
+            // submit
+            submitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                formMessage.innerText = '';
+                walletError.innerText = '';
+
+                const wallet = walletInput.value.trim();
+                if (!wallet) {
+                    walletError.innerText = '❌ Wallet required';
+                    return;
+                }
+                if (!isValidEthWallet(wallet)) {
+                    walletError.innerText = '❌ Not a valid ETH wallet (0x... or .eth)';
+                    return;
+                }
+                if (isDuplicate(wallet)) {
+                    walletError.innerText = '❌ This wallet is already whitelisted';
+                    return;
+                }
+                if (!followCheck.checked || !discordCheck.checked || !postedCheck.checked) {
+                    formMessage.innerHTML = '⚠️ Please follow @larrynfts, join Discord, AND post with 2 friends.';
+                    return;
+                }
+
+                // success: store wallet (simulate google forms via localStorage)
+                whitelistWallets.push(wallet);
+                localStorage.setItem('larryWhitelist', JSON.stringify(whitelistWallets));
+
+                // increment progress
+                updateProgress();
+
+                // show success message (idea 8: glowing popup style)
+                formMessage.innerHTML = '✅ YOU\'RE ON THE SKELETON LIST! GLOWING PURPLE CONFIRMED.';
+
+                // reset checkboxes? optional
+                followCheck.checked = false; discordCheck.checked = false; postedCheck.checked = false;
+                walletInput.value = '';
+
+                // after 2 seconds, go back to page1
+                setTimeout(() => {
+                    page2.classList.add('hidden');
+                    page1.classList.remove('hidden');
+                    formMessage.innerText = ''; // clear
+                }, 2400);
+            });
+
+            // extra: realtime X post template dynamic (tag friends note)
+            // (static but cool)
+
+            // ambient sound toggle (idea 19)
+            const soundToggle = document.getElementById('soundToggle');
+            const audio = document.getElementById('bgAudio');
+            let soundOn = false;
+            audio.volume = 0.3;
+            soundToggle.addEventListener('click', () => {
+                if (soundOn) {
+                    audio.pause();
+                    soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                } else {
+                    audio.play().catch(() => {}); // autoplay policies
+                    soundToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                }
+                soundOn = !soundOn;
+            });
+
+            // mobile friendly + pixel skeleton already
+
+            // larry token coming soon in footer already
+
+            // double entry check & wallet storage done.
+            // also progress bar shows real count.
+
+            // simulate initially 54 for demo
+            if (whitelistWallets.length === 3) { // default demo
+                whitelistWallets = ['0xTributeSkele...3aF', '0xLlamaLove...4D', '0xPurpleGlow...88', '0xCrypt0...f9E', '0xWAGMI...77', '0xPixelSkeleton...12', '0xFriend1...abc', '0xFriend2...def', '0xGhost..', '0xNFTrib...', '0xDemo1..', '0xDemo2...', '0xDemo3...', '0xDemo4...', '0xDemo5...', '0xDemo6...', '0xDemo7...', '0xDemo8...', '0xDemo9...', '0xDemo10...', '0xDemo11...', '0xDemo12...', '0xDemo13...', '0xDemo14...', '0xDemo15...', '0xDemo16...', '0xDemo17...', '0xDemo18...', '0xDemo19...', '0xDemo20...', '0xDemo21...', '0xDemo22...', '0xDemo23...', '0xDemo24...', '0xDemo25...', '0xDemo26...', '0xDemo27...', '0xDemo28...', '0xDemo29...', '0xDemo30...', '0xDemo31...', '0xDemo32...', '0xDemo33...', '0xDemo34...', '0xDemo35...', '0xDemo36...', '0xDemo37...', '0xDemo38...', '0xDemo39...', '0xDemo40...', '0xDemo41...', '0xDemo42...', '0xDemo43...', '0xDemo44...']; 
+                // just to make count 54ish
+                whitelistWallets.length = 54; // truncate
+                localStorage.setItem('larryWhitelist', JSON.stringify(whitelistWallets));
+                updateProgress();
+            }
+        })();
+    </script>
+</body>
+</html>
